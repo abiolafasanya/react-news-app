@@ -16,7 +16,7 @@ const Navbar = () => {
 
   const styles = {
     navbar: "flex capitalize justify-between items-center bg-white border-b sm:px-5 md:px-7 lg:px-28 h-20 w-full",
-    title: "text-2xl text-red-500",
+    title: "text-2xl font-semibold text-red-500",
     menu: "flex space-x-5 items-center",
     mobileMenu: "md:hidden",
   };
