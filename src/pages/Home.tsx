@@ -1,6 +1,5 @@
 import { Container } from '@mui/material'
-import Banner from '../components/common/Home/Banner'
-import Featured from '../components/common/Home/Featured'
+import Hero from '../components/common/Home/Hero'
 import Headlines from '../components/common/Home/Headlines'
 import Subscribe from '../components/common/Home/Subscribe'
 
@@ -8,8 +7,7 @@ const Home = () => {
   return (
     <main>
      <Container>
-        <Banner />
-        <Featured />
+        <Hero />
         <Headlines />
         <Subscribe />
     </Container>

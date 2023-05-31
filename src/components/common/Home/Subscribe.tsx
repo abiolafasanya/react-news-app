@@ -2,13 +2,13 @@ import { Box, Button } from "@mui/material";
 
 const Subscribe = () => {
   const styles = {
-    wrapper: "w-  full bg-gray-100 shadow-sm sm:text-center md:text-left my-14 px-7 gap-20 rounded-sm h-36 flex sm:flex-col md:flex-row justify-between items-center",
+    wrapper: "w-full bg-gray-100 shadow-sm sm:text-center md:text-left my-10 py-14 px-7 gap-20 rounded-sm lg:h-36 flex sm:flex-col md:flex-row justify-between items-center",
     firstUpdate: "-tracking-[-.3rem] uppercase text-sm",
     mainHeading: "text-2xl",
     highlightText: "text-red-500",
     emailInput: "border rounded mr-2 py-2 px-5",
     subscribeButton: "text-white bg-red-500",
-    size: 'w-1/2'
+    size: 'md:w-1/2'
   };
 
   return (

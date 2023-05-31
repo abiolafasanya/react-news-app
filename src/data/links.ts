@@ -1,9 +1,8 @@
 const navbarMenus = [
-  { id: 1, name: "Popular", url: "/" },
-  { id: 2, name: "Trending", url: "/" },
-  { id: 3, name: "Art", url: "/" },
-  { id: 4, name: "Sport", url: "/" },
-  { id: 5, name: "Science", url: "/" },
+  { id: 1, name: "Business", url: "/business" },
+  { id: 2, name: "Politics", url: "/politics" },
+  { id: 3, name: "Sports", url: "/sports" },
+  { id: 4, name: "Technology", url: "/tech" },
 ];
 
 export { navbarMenus };

@@ -1,23 +1,29 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Article as ArticleType } from '../types';
-import { useHeadlinesMutation } from '../store/slices/articleSlice';
 import { Button, Container } from '@mui/material';
 import { formatDate } from '../utils/formatter';
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import  { Facebook } from 'react-content-loader'
+import { getStorageItem } from '../utils/storage';
+import NoImage from '../assets/NoImage.jpg'
 
-const Article = () => {
+const SearchArticle = ({pathName}: {pathName: string}) => {
   const { title } = useParams();
   const [article, setArticle] = useState({} as ArticleType);
-  const [articlesData, {isLoading}] = useHeadlinesMutation();
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    const fetchArticle = async () => {
+    setIsLoading(true)
+    const fetchArticle = () => {
       try {
-        const data = await articlesData({}).unwrap() as ArticleType[];
-        const result = data.find((article) => article.title === title)as ArticleType;
+        const data = getStorageItem(pathName);
+        console.log(data)
+        const result = data?.find((item: ArticleType) => {
+          return item.title === title;
+        });
         setArticle(result)
+        setIsLoading(false)
       } catch (error) {
         if(error instanceof Error) {
           console.log(error.message);
@@ -25,14 +31,14 @@ const Article = () => {
       }
     };
     fetchArticle();
-  }, [articlesData, title]);
+  }, [pathName, title]);
 
   return (
     <Container className='my-10'>
       <Link to="/"><Button><KeyboardBackspaceIcon /></Button></Link>
       {isLoading ? <Facebook /> : <div className='mt-4'>
         <picture>
-          <img src={article?.image} alt={article.title} loading="lazy" />
+          <img src={article?.image ?? NoImage} alt={article.title} loading="lazy" />
         </picture>
         <div className='bg-white p-5 rounded-b shadow-sm'>
           <h3 className='text-xl font-semibold'>{article?.title}</h3>
@@ -49,4 +55,4 @@ const Article = () => {
   );
 };
 
-export default Article;
+export default SearchArticle;

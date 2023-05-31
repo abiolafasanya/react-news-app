@@ -1,47 +1,61 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import Avatar from "@mui/material/Avatar";
-import { Badge, Button, MenuItem } from "@mui/material";
-import { Notifications, EditNote } from "@mui/icons-material";
 import MobileMenuButton from "../common/MobileMenuButton";
 import MobileMenu from "../common/MobileMenu";
 import { navbarMenus } from "../../data/links";
+import { useSelector } from "react-redux";
+import ProfileMenu from "../common/ProfileMenu";
+import SearchForm from "../common/SearchForm";
+import { authState } from "../../types";
 
 const Navbar = () => {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(true);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isProfile, setIsProfile] = useState(false);
+  const auth = useSelector((state: authState) => state.auth);
 
   const handleMobileMenuOpen = () => {
-    setIsMobileMenuOpen(val => !val);
+    setIsMobileMenuOpen((val) => !val);
   };
 
   const styles = {
-    navbar: "flex capitalize justify-between items-center bg-white border-b sm:px-5 md:px-7 lg:px-28 h-20 w-full",
+    navbar:
+      "flex capitalize justify-between items-center bg-white border-b sm:px-5 md:px-7 lg:px-28 h-20 w-full",
     title: "text-2xl font-semibold text-red-500",
-    menu: "flex space-x-5 items-center",
+    menu: "sm:hidden md:flex space-x-5 items-center",
+    menu2: "flex space-x-5 items-center",
+    searchInput: "py-3 px-5 outline-none rounded-md bg-red-50",
     mobileMenu: "md:hidden",
+    button: "py-3 px-5 bg-red-500 rounded-md text-white",
   };
 
   return (
     <nav className={styles.navbar}>
       <div className="flex gap-x-10 items-center">
-        <h2 className={styles.title}>HeadlineHive</h2>
-        <menu className={`${styles.menu} sm:hidden`}>
+        <Link to="/" className={styles.title}>HeadlineHive</Link>
+        <menu className={styles.menu}>
           {navbarMenus.map((menu) => (
-            <Link key={menu.id} to={"#"}>
+            <Link key={menu.name} to={menu.url}>
               {menu.name}
             </Link>
           ))}
         </menu>
       </div>
+      <SearchForm />
       <div>
-        <menu className={styles.menu}>
-          <Button endIcon={<EditNote />}>write</Button>
-          <MenuItem >
-            <Badge badgeContent={2} color="error">
-              <Notifications />
-            </Badge>
-          </MenuItem>
-          <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
+        <menu className={styles.menu2}>
+          {auth.isAuthenticated && (
+            <div className="sm:hidden md:flex relative">
+              <Avatar
+                alt={auth.user?.name}
+                src="/static/images/avatar/1.jpg"
+                onClick={() => setIsProfile((pro) => !pro)}
+              />
+              {isProfile && (
+                <ProfileMenu />
+              )}
+            </div>
+          )}
           {/* Mobile Menu */}
           <div className={styles.mobileMenu}>
             <MobileMenuButton onClick={handleMobileMenuOpen} />

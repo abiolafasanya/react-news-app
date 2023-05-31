@@ -1,4 +1,4 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 export interface AuthType {
   isAuthenticated: boolean;
@@ -8,15 +8,15 @@ export interface AuthType {
 export type AuthenticatedUser = {
   id: string;
   email: string;
-  username?: string;
+  name?: string;
 } | null;
 
 const authData = (): AuthType => {
-  const auth = localStorage.getItem('auth');
+  const auth = localStorage.getItem("auth");
   if (auth === null || auth === undefined) {
     return {
       isAuthenticated: false,
-      user: { email: '', id: '', username: '' },
+      user: { email: "", id: "", name: "" },
       token: null,
     };
   }
@@ -32,24 +32,24 @@ const initialState: AuthType = {
 };
 
 const authSlice = createSlice({
-  name: 'auth',
+  name: "auth",
   initialState,
   reducers: {
     setAuth(state, action: PayloadAction<AuthType>) {
+      localStorage.removeItem("auth");
       state.isAuthenticated = true;
       state.token = action.payload.token;
       state.user = action.payload.user;
-
       // Store to localStorage
       const dataToStore = JSON.stringify(state);
-      localStorage.setItem('auth', dataToStore);
+      localStorage.setItem("auth", dataToStore);
     },
     logout(state) {
       state.isAuthenticated = false;
-      state.token = '';
+      state.token = "";
       state.user = null;
       // Remove from localStorage
-      localStorage.removeItem('auth');
+      localStorage.removeItem("auth");
     },
   },
 });

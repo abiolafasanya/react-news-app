@@ -1,10 +1,11 @@
 import { Facebook, Instagram, LinkedIn, Twitter } from "@mui/icons-material";
 import { Box, Container } from "@mui/material";
+// import { authActions } from "../../store/slices/authSlice";
+import {useSelector} from 'react-redux';
+import { authState } from '../../types';
 
 const  Footer = () => {
   const styles = {
-    footer: "",
-    container: "",
     heading: "font-semibold text-xl text-red-500",
     description: "text-sm text-gray-500",
     socialIcons: "flex gap-4 my-5",
@@ -15,9 +16,11 @@ const  Footer = () => {
     borderSeparator: "text-center p-3 border-t",
   };
 
+  const auth = useSelector((state: authState) => state.auth);
+
   return (
-    <footer className={styles.footer}>
-      <Container className={styles.container}>
+    <footer>
+      {auth.isAuthenticated && <Container>
         <div className="flex sm:flex-col md:flex-row flex-wrap gap-14">
           <div>
             <Box className="w-[350px]">
@@ -60,43 +63,35 @@ const  Footer = () => {
                 <li>Startup</li>
                 <li>Employee</li>
                 <li>Success</li>
-                <li>Vidoes</li>
-                <li>Market</li>
               </menu>
             </Box>
             <Box>
               <h3 className={styles.columnHeading}>Travel</h3>
               <menu className={styles.columnMenu}>
-                <li>Startup</li>
-                <li>Employee</li>
-                <li>Success</li>
-                <li>Vidoes</li>
-                <li>Market</li>
+                <li>Destination</li>
+                <li>Food and Drink</li>
+                <li>News</li>
               </menu>
             </Box>
             <Box>
               <h3 className={styles.columnHeading}>Technology</h3>
               <menu className={styles.columnMenu}>
-                <li>Startup</li>
-                <li>Employee</li>
-                <li>Success</li>
-                <li>Vidoes</li>
-                <li>Market</li>
+                <li>Innovative</li>
+                <li>Gadget</li>
+                <li>Upstarts</li>
               </menu>
             </Box>
             <Box>
               <h3 className={styles.columnHeading}>Sport</h3>
               <menu className={styles.columnMenu}>
-                <li>Startup</li>
-                <li>Employee</li>
-                <li>Success</li>
-                <li>Vidoes</li>
-                <li>Market</li>
+                <li>Football</li>
+                <li>Tennis</li>
+                <li>Golf</li>
               </menu>
             </Box>
           </div>
         </div>
-      </Container>
+      </Container>}
       <p className={styles.borderSeparator}>
         Copyright &copy; {new Date(Date.now()).getFullYear()} HeadlineHive
       </p>

@@ -2,11 +2,18 @@ import { Box, Button } from "@mui/material";
 import { useState, useEffect } from "react";
 import { useArticlesMutation } from "../../../store/slices/articleSlice";
 import { Article } from "../../../types";
+import  { Facebook } from 'react-content-loader'
+
+type Data = {
+  general: Article[],
+  guardians: Article[],
+  nytimes: Article[],
+}
 
 const Featured: React.FC = () => {
   const [articles, setArticle] = useState<Article[]>([]);
   const [step, setStep] = useState<number>(0);
-  const [articlesData] = useArticlesMutation();
+  const [articlesData, {isLoading}] = useArticlesMutation();
 
   const handleNextStep = () => {
     if (step < articles.length - 1) {
@@ -19,8 +26,8 @@ const Featured: React.FC = () => {
   useEffect(() => {
     const fetchArticle = async () => {
       try {
-        const { data } = await articlesData({}).unwrap();
-        setArticle(data);
+        const data: Data = await articlesData({}).unwrap();
+        setArticle(data.general);
       } catch (error) {
         console.log(error);
       }
@@ -29,26 +36,27 @@ const Featured: React.FC = () => {
   }, [articlesData]);
 
   return (
-    <div className="w-full pt-14">
-      {articles.length > 0 && (
-        <Box className="flex sm:flex-col md:flex-row gap-5 justify-between">
-          <div className="md:w-1/2">
+    <>
+    {isLoading ? <Facebook /> : <div className="w-full pt-14">
+      {articles?.length > 0 && (
+        <Box className="flex sm:flex-col lg:flex-row gap-5 justify-between">
+          <div className="lg:w-1/2">
             <img
-              src={articles[step]?.urlToImage}
+              src={articles[step]?.image}
               loading="lazy"
               alt={articles[step]?.title}
-              className="rounded-md object-cover object-center max-h-72 w-full"
+              className="rounded-md object-cover object-center h-full w-full"
             />
           </div>
 
           <div
-            className="relative md:w-1/2 bg-white rounded-md shadow-sm p-5"
+            className="relative lg:w-1/2 bg-white rounded-md shadow-sm p-5"
             key={articles[step].title}
           >
             <h2 className="text-2xl mb-5">{articles[step]?.title}</h2>
             <p>{articles[step]?.description}</p>
             <div className="mt-5">
-              <span>{articles[step]?.source?.name}</span>
+              <span>{articles[step]?.source}</span>
             </div>
             <div className="h-12 w-full flex">
               <div className="ml-auto">
@@ -60,7 +68,8 @@ const Featured: React.FC = () => {
           </div>
         </Box>
       )}
-    </div>
+    </div>}
+    </>
   );
 };
 
