@@ -10,7 +10,7 @@ services:
       POSTGRES_DB: mydb
   
   server:
-    image: backend-laravel-api_server
+    image: harbiola/backend-laravel-api:latest
     ports:
       - 8000:8000
     volumes:
