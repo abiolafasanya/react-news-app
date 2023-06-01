@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+
+  db:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: abiola78
+      POSTGRES_DB: mydb
+  
+  server:
+    image: backend-laravel-api_server
+    ports:
+      - 8000:8000
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      - db
+
+  client:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+    volumes:
+      - ./:/app
+    tty: true
+      

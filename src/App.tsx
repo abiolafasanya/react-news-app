@@ -5,7 +5,6 @@ import Articles from './pages/Articles';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
-import Sports from './pages/Sports';
 import Page from './pages/Page';
 import SearchArticle from './pages/SearchArticle';
 // import UserPreferenceComponent from './pages/Preference';

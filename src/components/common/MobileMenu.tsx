@@ -4,7 +4,7 @@ import { navbarMenus } from "../../data/links";
 import { Action, authState } from "../../types";
 import { Close } from "@mui/icons-material";
 import { useSelector, useDispatch } from "react-redux";
-import { Avatar, Badge, Button, MenuItem } from "@mui/material";
+import { Avatar, Button } from "@mui/material";
 import { authActions } from "../../store/slices/authSlice";
 import { useLogoutMutation } from "../../store/slices/userSlice";
 

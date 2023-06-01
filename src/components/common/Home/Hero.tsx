@@ -1,7 +1,5 @@
-import { Search } from "@mui/icons-material";
 import UserPreferenceComponent from "../Preference";
 import Featured from "./Featured";
-import { Button } from "@mui/material";
 import SearchForm from "../SearchForm";
 
 const Hero = () => {
