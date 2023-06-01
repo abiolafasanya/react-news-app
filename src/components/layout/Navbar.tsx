@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Avatar from "@mui/material/Avatar";
 import MobileMenuButton from "../common/MobileMenuButton";
 import MobileMenu from "../common/MobileMenu";
@@ -8,11 +8,16 @@ import { useSelector } from "react-redux";
 import ProfileMenu from "../common/ProfileMenu";
 import SearchForm from "../common/SearchForm";
 import { authState } from "../../types";
+import { Login } from "@mui/icons-material";
+import { Button } from "@mui/material";
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isProfile, setIsProfile] = useState(false);
   const auth = useSelector((state: authState) => state.auth);
+  const navigate = useNavigate()
+
+  const toLogin = () => navigate('/login');
 
   const handleMobileMenuOpen = () => {
     setIsMobileMenuOpen((val) => !val);
@@ -44,6 +49,12 @@ const Navbar = () => {
       <SearchForm />
       <div>
         <menu className={styles.menu2}>
+      {!auth.isAuthenticated && 
+      <Button onClick={toLogin} color="error" endIcon={<Login />}>
+        Login 
+      </Button>
+      }
+
           {auth.isAuthenticated && (
             <div className="sm:hidden md:flex relative">
               <Avatar

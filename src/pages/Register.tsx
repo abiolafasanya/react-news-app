@@ -2,35 +2,60 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styles from "../assets/styles/form";
 import { useRegisterMutation } from "../store/slices/userSlice";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { Alert, AlertColor } from "@mui/material";
+import { reqType } from "../types";
+
 
 const Register = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [Confirmpassword, setConfirmPassword] = useState("");
-  const [register] = useRegisterMutation();
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [register, { isSuccess, isError }] = useRegisterMutation();
+  const [reqStatus, setRequestStatus] = useState({} as reqType);
   const navigate = useNavigate();
-  
+
   const handleRegister = async (event: React.FormEvent<HTMLFormElement>) => {
     // Handle registration logic here
+    setRequestStatus({ color: "", message: "" });
     event.preventDefault();
+    if (
+      name === "" ||
+      email === "" ||
+      password === "" ||
+      confirmPassword === ""
+    ) {
+      setRequestStatus({
+        color: "error",
+        message: "Please enter all fields",
+      });
+    }
     try {
-      const data = await register({
+      const response = await register({
         name,
         email,
         password,
-        password_confirmation: Confirmpassword,
+        password_confirmation: confirmPassword,
       }).unwrap();
-      if(data.success) {
-        toast.success('Successfully registered')
-        navigate('/')
+      if (response.success) {
+        setConfirmPassword("");
+        setPassword("");
+        setEmail("");
+        setName("");
+        setRequestStatus({
+          color: "success",
+          message: response.message ?? "Successfully registered",
+        });
+        navigate("/login");
+        return
       }
     } catch (error) {
       if (error instanceof Error) {
+        setRequestStatus({
+          color: "error",
+          message: error.message ?? "Registration Failed",
+        });
         console.log(error.message || error);
-        toast.error('Error registering')
       }
     }
   };
@@ -39,6 +64,12 @@ const Register = () => {
     <div className={styles.container}>
       <form className={styles.form} onSubmit={handleRegister}>
         <h1 className={styles.heading}>Register</h1>
+        {isSuccess ||
+          (isError && (
+            <Alert color={reqStatus?.color as AlertColor}>
+              {reqStatus.message}
+            </Alert>
+          ))}
         <input
           type="text"
           placeholder="Name"
@@ -64,7 +95,7 @@ const Register = () => {
           type="password"
           placeholder="Confirm Password"
           className={styles.input}
-          value={Confirmpassword}
+          value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
         />
         <button type="submit" className={styles.button}>
@@ -74,7 +105,6 @@ const Register = () => {
           Already have an account? <Link to="/login">Login</Link>
         </p>
       </form>
-      <ToastContainer />
     </div>
   );
 };

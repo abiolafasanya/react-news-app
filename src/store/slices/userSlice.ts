@@ -16,16 +16,15 @@ export const userApiSlice = apiSlice.injectEndpoints({
       query: (body) => ({
         url: `${USER_API}/auth/signup`,
         method: "POST",
-        body: JSON.stringify(body),
-        headers: { 'Accept': 'application/json' },
+        body,
       }),
     }),
     preferences: builder.mutation({
       query: (body) => ({
         url: `${USER_API}/preferences`,
+        headers: { 'Accept': 'application/json' },
         method: "POST",
         body: JSON.stringify(body),
-        headers: { 'Accept': 'application/json' },
         'Authorization': `Bearer ${auth.token}`
       }),
     }),

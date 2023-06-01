@@ -23,3 +23,8 @@ export interface authState {
 export interface DropMenu {
   menus: { id: string; name: string; link: string }[];
 }
+
+export type reqType = {
+  message: string;
+  color: string;
+};

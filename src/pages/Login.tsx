@@ -3,15 +3,15 @@ import { Link, useNavigate } from "react-router-dom";
 import styles from "../assets/styles/form";
 import { useLoginMutation } from "../store/slices/userSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { AuthType, authActions } from "../store/slices/authSlice";
-import { authState } from "../types";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import {  authActions } from "../store/slices/authSlice";
+import { authState, reqType } from "../types";
+import { Alert, AlertColor } from "@mui/material";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [login] = useLoginMutation();
+  const [reqStatus, setRequestStatus] = useState({} as reqType);  
+  const [login, {isSuccess, isError}] = useLoginMutation();
   const dispatch = useDispatch();
   const navigate = useNavigate()
   const auth = useSelector((state: authState) => state.auth);
@@ -27,7 +27,7 @@ const Login = () => {
       const data = (await login({
         email,
         password,
-      }).unwrap()) as AuthType;
+      }).unwrap());
 
       dispatch(
         authActions.setAuth({
@@ -40,10 +40,12 @@ const Login = () => {
           },
         })
       );
-      toast.success('Login successful')
-      navigate('/', {replace: true});
+      if(data.success){
+        navigate('/', {replace: true});
+      }
     } catch (error) {
       if (error instanceof Error) {
+        setRequestStatus({color: 'error', message: error.message ?? 'failed'})
         console.log(error.message);
       }
     }
@@ -53,6 +55,12 @@ const Login = () => {
     <div className={styles.container}>
       <form className={styles.form}>
         <h1 className={styles.heading}>Login</h1>
+        {isSuccess ||
+          (isError && (
+            <Alert color={reqStatus?.color as AlertColor}>
+              {reqStatus.message}
+            </Alert>
+          ))}
         <input
           type="email"
           placeholder="Email"
@@ -74,7 +82,6 @@ const Login = () => {
           Don't have an account? <Link to="/register">Register</Link>
         </p>
       </form>
-      <ToastContainer />
     </div>
   );
 };

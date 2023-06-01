@@ -1,9 +1,10 @@
-import { Button } from "@mui/material";
+import { Alert, Button } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
 import { usePreferencesMutation } from "../../store/slices/userSlice";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import { authState } from "../../types";
+import { useNavigate } from 'react-router-dom';
 
 const UserPreferenceComponent: React.FC = () => {
   const [selectedSources, setSelectedSources] = useState<string[]>([]);
@@ -14,6 +15,7 @@ const UserPreferenceComponent: React.FC = () => {
   const authoursRef = useRef<HTMLDetailsElement>(null);
   const [preferences, { isSuccess, isError }] = usePreferencesMutation();
   const auth = useSelector((state: authState) => state.auth);
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (sourcesRef.current) {
@@ -70,6 +72,7 @@ const UserPreferenceComponent: React.FC = () => {
   };
 
   const handleSavePreferences = async () => {
+    if(!auth.isAuthenticated) return navigate('/login')
     await preferences({
       sources: selectedSources,
       categories: selectedCategories,
@@ -146,6 +149,7 @@ const UserPreferenceComponent: React.FC = () => {
       <Button color="error" variant="contained" onClick={handleSavePreferences}>
         Save
       </Button>}
+      {!auth.isAuthenticated && <Alert color="info">SignIn is required to save your preferences</Alert>}
     </section>
   );
 };
